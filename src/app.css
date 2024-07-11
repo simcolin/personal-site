@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+* {
+    @apply box-border;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
