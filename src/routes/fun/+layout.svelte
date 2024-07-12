@@ -11,7 +11,7 @@
         { name: "Square Stuff", path: "/fun/projects/square-stuff" },
         { name: "Game Of Life", path: "/fun/projects/game-of-life" },
         { name: "GPU Pathtracer", path: "/fun/projects/gpu-pathtracer" },
-        // { name: "Animated Grass", path: "/fun/projects/animated-grass" },
+        { name: "Animated Grass", path: "/fun/projects/animated-grass" },
     ];
 </script>
 
