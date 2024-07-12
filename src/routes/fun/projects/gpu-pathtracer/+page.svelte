@@ -121,7 +121,7 @@
     });
 </script>
 
-<div bind:this={canvasContainer} class="w-full h-full grow relative">
+<div bind:this={canvasContainer} class="w-full h-full grow relative overflow-hidden">
     <div class="absolute top-2 left-2 z-10 text-border">{currentFPS} FPS</div>
 </div>
 

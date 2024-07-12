@@ -31,13 +31,14 @@
     let pixelatedStrands: PixelatedStrand[] = [];
     let strands: PixelatedStrand[] = [];
 
-    let renderPixel = false;
+    let renderPixel = true;
 
     let noise = createNoise3D();
 
     $: renderPixel, onRenderPixelChanged();
 
     function setup() {
+        onRenderPixelChanged();
         ctx.strokeStyle = "transparent";
         ctx.imageSmoothingEnabled = false;
 
@@ -124,10 +125,9 @@
 
     function onRenderPixelChanged() {
         if (!ctx) return;
+        ctx.resetTransform();
         if (renderPixel) {
             ctx.scale(PIXEL_SIZE, PIXEL_SIZE);
-        } else {
-            ctx.resetTransform();
         }
     }
 
@@ -148,9 +148,9 @@
 
 <div bind:this={canvasContainer} class="w-full h-full relative">
     <div class="absolute top-2 right-2 z-10 shadow-md">{frameRate} FPS</div>
-    <div class="flex items-center gap-1 absolute top-2 left-2 z-10 shadow-md">
-        <input type="checkbox" bind:checked={renderPixel} />
-        <span>Render Pixel</span>
-    </div>
+    <label class="flex items-center gap-2 absolute top-2 left-2 z-10 shadow-md select-none">
+        <input type="checkbox" class="checkbox-sm" bind:checked={renderPixel} />
+        Render Pixel
+    </label>
     <canvas bind:this={canvas} on:click={onClick} class="w-full h-full"></canvas>
 </div>
