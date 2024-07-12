@@ -1,7 +1,6 @@
 <script lang="ts">
     import { numbersOnly } from "$lib/inputHelpers";
     import { onMount } from "svelte";
-    import ProjectView from "../ProjectView.svelte";
 
     let intervalRunning = false;
     let tickInterval: NodeJS.Timeout;
@@ -113,31 +112,29 @@
     });
 </script>
 
-<ProjectView title="Game Of Life" id="game-of-life">
-    <div class="w-full h-full bg-slate-800 flex flex-col items-center justify-center gap-4 p-8">
-        <div class="flex gap-4">
-            <button class="rounded py-2 px-4 border bg-slate-700 hover:bg-slate-600" on:click={() => toggleAutoTick()}>{intervalRunning ? "Stop" : "Start"}</button>
-            <button class="rounded py-2 px-4 border bg-slate-700 hover:bg-slate-600" on:click={() => manualTick()}>Next</button>
-            <button class="rounded py-2 px-4 border bg-slate-700 hover:bg-slate-600" on:click={() => clearGrids()}>Clear</button>
-        </div>
-        <div class="flex gap-4">
-            <button class="rounded py-2 px-4 border bg-slate-700 hover:bg-slate-600" on:click={() => initGrids()}>Init Grids</button>
-            <input class="rounded py-2 px-4 border bg-slate-700 appearance-none" use:numbersOnly bind:value={width} type="number">
-            <input class="rounded py-2 px-4 border bg-slate-700 appearance-none" use:numbersOnly bind:value={height} type="number">
-        </div>
-        <div class="w-full grow flex items-center justify-center" bind:clientWidth={containerWidth} bind:clientHeight={containerHeight}>
-            <div class="max-w-full flex gap-[1px]">
-                {#each currentGrid as row, x}
-                    <div class="flex flex-col gap-[1px]">
-                        {#each row as cell, y}
-                            <button on:click={() => toggleCell(x, y)} class="cell" style:--cell-size-js="{cellSize}px" class:bg-black={cell} class:bg-white={!cell} />
-                        {/each}
-                    </div>
-                {/each}
-            </div>
+<div class="w-full h-full bg-slate-800 flex flex-col items-center justify-center gap-4 p-8">
+    <div class="flex gap-4">
+        <button class="rounded py-2 px-4 border bg-slate-700 hover:bg-slate-600" on:click={() => toggleAutoTick()}>{intervalRunning ? "Stop" : "Start"}</button>
+        <button class="rounded py-2 px-4 border bg-slate-700 hover:bg-slate-600" on:click={() => manualTick()}>Next</button>
+        <button class="rounded py-2 px-4 border bg-slate-700 hover:bg-slate-600" on:click={() => clearGrids()}>Clear</button>
+    </div>
+    <div class="flex gap-4">
+        <button class="rounded py-2 px-4 border bg-slate-700 hover:bg-slate-600" on:click={() => initGrids()}>Init Grids</button>
+        <input class="rounded py-2 px-4 border bg-slate-700 appearance-none" use:numbersOnly bind:value={width} type="number">
+        <input class="rounded py-2 px-4 border bg-slate-700 appearance-none" use:numbersOnly bind:value={height} type="number">
+    </div>
+    <div class="w-full grow flex items-center justify-center" bind:clientWidth={containerWidth} bind:clientHeight={containerHeight}>
+        <div class="max-w-full flex gap-[1px]">
+            {#each currentGrid as row, x}
+                <div class="flex flex-col gap-[1px]">
+                    {#each row as cell, y}
+                        <button on:click={() => toggleCell(x, y)} class="cell" style:--cell-size-js="{cellSize}px" class:bg-black={cell} class:bg-white={!cell} />
+                    {/each}
+                </div>
+            {/each}
         </div>
     </div>
-</ProjectView>
+</div>
 
 <style lang="postcss">
     .cell {

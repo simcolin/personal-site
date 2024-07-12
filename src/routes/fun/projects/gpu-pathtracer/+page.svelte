@@ -1,7 +1,6 @@
 <script lang="ts">
     import type P5 from "p5";
     import { onDestroy, onMount } from "svelte";
-    import ProjectView from "../ProjectView.svelte";
     import vertex from "./vertex.glsl?raw";
     import fragment from "./fragment.glsl?raw";
 
@@ -27,13 +26,8 @@
         }
 
         sk.setup = () => {
-            const parentRect = canvasContainer.getBoundingClientRect();
-            console.log(canvasContainer.clientHeight);
-            console.log(canvasContainer.offsetHeight);
-            console.log(canvasContainer.scrollHeight);
-            console.log(canvasContainer);
-            console.log(getComputedStyle(canvasContainer).height);
-            const canvas = sk.createCanvas(parentRect.width, parentRect.height, sk.WEBGL);
+            const nav = document.getElementById("nav")!;
+            const canvas = sk.createCanvas(window.innerWidth - nav.clientWidth, window.innerHeight, sk.WEBGL);
             canvas.parent(canvasContainer);
 
             sk.frameRate(165);
@@ -82,7 +76,7 @@
         sk.draw = () => {
             const delta = sk.deltaTime / 1000;
             if(sk.frameCount % 10 === 0) {
-                currentFPS = Math.floor(1 / delta);
+                currentFPS = Math.floor(sk.frameRate());
             }
 
             let cameraDir = sk.createVector(0, 0, 1);
@@ -127,15 +121,12 @@
     });
 </script>
 
-<ProjectView title="GPU Pathtracer" id="gpu-pathtracer">
-    <div bind:this={canvasContainer} class="w-full h-full grow">
-        <div class="absolute top-2 left-2 z-10 text-border">{currentFPS} FPS</div>
-    </div>
-</ProjectView>
+<div bind:this={canvasContainer} class="w-full h-full grow relative">
+    <div class="absolute top-2 left-2 z-10 text-border">{currentFPS} FPS</div>
+</div>
 
 <style>
     .text-border {
-        --text-border-color: #000;
-        text-shadow: 1px 1px var( --text-border-color), -1px -1px var( --text-border-color), 1px -1px var( --text-border-color), -1px 1px var( --text-border-color);
+        text-shadow: 1px 1px #000;
     }
 </style>

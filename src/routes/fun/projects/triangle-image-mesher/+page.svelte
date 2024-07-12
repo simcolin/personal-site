@@ -1,6 +1,5 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import ProjectView from "../ProjectView.svelte";
 
     type Vector = { x: number, y: number };
 
@@ -229,49 +228,47 @@
     })
 </script>
 
-<ProjectView title="Triangle Image Mesher" id="triangle-image-mesher">
-    <div class="w-full h-full flex text-white">
-        <nav class="flex flex-col items-center p-4 bg-slate-800 shrink-0 basis-[content]">
-            <!-- <h2 class="text-xl my-4 font-bold">Triangle Image Mesher</h2> -->
-            <p class="my-2">
-                Drop an image, see the result,<br>
-                Play with values and press generate,<br>
-                Download the result if you like it
-            </p>
-            <label class="mb-1" for="image-input">Image</label>
-            <input class="hidden" type="file" accept="image/*" on:change={onImageChange} bind:this={imageInput} id="image-input">
-            <button
-                class="w-full flex items-center justify-center border h-40 rounded cursor-pointer select-none mb-4"
-                on:click={() => imageInput.click()}
-                on:dragover={onDropzoneDragOver}
-                on:drop={onDropzoneDrop}
-            >
-                {dropzoneText}
-            </button>
-            <label class="mb-1" for="spacing-input">Spacing</label>
-            <input
-                type="number" min="1" max={maxSpacing} id="spacing-input"
-                bind:value={spacing}
-                class="mb-4 w-full border rounded bg-transparent px-4 py-2 appearance-none outline-none"
-            >
-            <label class="mb-1" for="randomness-input">Randomness</label>
-            <input
-                type="number" min="0" max={maxRandomness} id="randomness-input"
-                bind:value={randomness}
-                class="mb-4 w-full border rounded bg-transparent px-4 py-2 appearance-none outline-none"
-            >
-            <label class="mb-1" for="gradient-checkbox">Gradiant</label>
-            <input type="checkbox" id="gradient-checkbox" bind:checked={useGradient} class="mb-4 w-6 h-6">
-            <p class="my-2">{generationTimeText}</p>
-            <button class="mb-4 w-full py-2 rounded border bg-slate-700 hover:bg-slate-600" on:click={() => drawImageToCanvas(image)}>Generate</button>
-            <button class="mb-4 w-full py-2 rounded border bg-slate-700 hover:bg-slate-600" class:opacity-50={downloadDisabled} disabled={downloadDisabled} on:click={downloadCanvas}>{downloadText}</button>
-            <a class="mt-auto underline" href="https://github.com/simcolin/triangle-image-mesher" target="blank">Github</a>
-        </nav>
-        <div class="canvas-ctn bg-slate-900 grow">
-            <canvas bind:this={canvas} class="w-full h-full object-contain" />
-        </div>
+<div class="w-full h-full flex text-white">
+    <nav class="flex flex-col items-center p-4 bg-slate-800 shrink-0 basis-[content]">
+        <!-- <h2 class="text-xl my-4 font-bold">Triangle Image Mesher</h2> -->
+        <p class="my-2">
+            Drop an image, see the result,<br>
+            Play with values and press generate,<br>
+            Download the result if you like it
+        </p>
+        <label class="mb-1" for="image-input">Image</label>
+        <input class="hidden" type="file" accept="image/*" on:change={onImageChange} bind:this={imageInput} id="image-input">
+        <button
+            class="w-full flex items-center justify-center border h-40 rounded cursor-pointer select-none mb-4"
+            on:click={() => imageInput.click()}
+            on:dragover={onDropzoneDragOver}
+            on:drop={onDropzoneDrop}
+        >
+            {dropzoneText}
+        </button>
+        <label class="mb-1" for="spacing-input">Spacing</label>
+        <input
+            type="number" min="1" max={maxSpacing} id="spacing-input"
+            bind:value={spacing}
+            class="mb-4 w-full border rounded bg-transparent px-4 py-2 appearance-none outline-none"
+        >
+        <label class="mb-1" for="randomness-input">Randomness</label>
+        <input
+            type="number" min="0" max={maxRandomness} id="randomness-input"
+            bind:value={randomness}
+            class="mb-4 w-full border rounded bg-transparent px-4 py-2 appearance-none outline-none"
+        >
+        <label class="mb-1" for="gradient-checkbox">Gradiant</label>
+        <input type="checkbox" id="gradient-checkbox" bind:checked={useGradient} class="mb-4 w-6 h-6">
+        <p class="my-2">{generationTimeText}</p>
+        <button class="mb-4 w-full py-2 rounded border bg-slate-700 hover:bg-slate-600" on:click={() => drawImageToCanvas(image)}>Generate</button>
+        <button class="mb-4 w-full py-2 rounded border bg-slate-700 hover:bg-slate-600" class:opacity-50={downloadDisabled} disabled={downloadDisabled} on:click={downloadCanvas}>{downloadText}</button>
+        <a class="mt-auto underline" href="https://github.com/simcolin/triangle-image-mesher" target="blank">Github</a>
+    </nav>
+    <div class="canvas-ctn bg-slate-900 grow">
+        <canvas bind:this={canvas} class="w-full h-full object-contain" />
     </div>
-</ProjectView>
+</div>
 
 <style lang="postcss">
     input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {

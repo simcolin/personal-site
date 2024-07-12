@@ -1,8 +1,7 @@
 <script lang="ts">
     import type P5 from "p5";
     import { onDestroy, onMount } from "svelte";
-    import ProjectView from "../ProjectView.svelte";
-
+    
     let canvasContainer: HTMLDivElement;
     let p5: P5;
 
@@ -83,8 +82,8 @@
         }
 
         sk.setup = () => {
-            const parentRect = canvasContainer.getBoundingClientRect()
-            const canvas = sk.createCanvas(parentRect.width, parentRect.height);
+            const nav = document.getElementById("nav")!;
+            const canvas = sk.createCanvas(window.innerWidth - nav.clientWidth, window.innerHeight);
             canvas.parent(canvasContainer);
             sk.strokeCap(sk.ROUND);
             sk.strokeJoin(sk.ROUND);
@@ -132,6 +131,4 @@
     });
 </script>
 
-<ProjectView title="Weird 2" id="weird-2">
-    <div bind:this={canvasContainer} class="w-full h-full" />
-</ProjectView>
+<div bind:this={canvasContainer} class="w-full h-full"></div>

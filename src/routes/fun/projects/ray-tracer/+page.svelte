@@ -7,7 +7,6 @@
     import { antialiazedRenderPixel } from "./rendering";
     import seedrandom from "seedrandom";
     import RayWorker from "./worker?worker";
-    import ProjectView from "../ProjectView.svelte";
 
     let canvas: HTMLCanvasElement;
 
@@ -152,10 +151,8 @@
     });
 </script>
 
-<ProjectView title="Ray Tracer/Marcher" id="ray-tracer">
-    <div class="w-full h-full relative bg-black">
-        <div class="absolute left-0 bottom-0 h-1 border-t border-black bg-teal-500" style="width: {Math.floor(progress * 100)}%"/>
-        <canvas class="w-full h-full" bind:this={canvas} />
-        <RayTracerOptions bind:options={options} {stats} on:resetscene={onResetScene} on:rerender={onRerender} />
-    </div>
-</ProjectView>
+<div class="w-full h-full relative bg-black">
+    <div class="absolute left-0 bottom-0 h-1 border-t border-black bg-teal-500" style="width: {Math.floor(progress * 100)}%"/>
+    <canvas class="w-full h-full" bind:this={canvas} />
+    <RayTracerOptions bind:options={options} {stats} on:resetscene={onResetScene} on:rerender={onRerender} />
+</div>
