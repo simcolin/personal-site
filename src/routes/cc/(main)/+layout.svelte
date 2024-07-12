@@ -5,7 +5,6 @@
 
     const routes = [
         { name: "Script Editor", path: "/cc" },
-        { name: "Jukebox", path: "/cc/jukebox" },
     ];
 </script>
 

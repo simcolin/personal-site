@@ -24,8 +24,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@ffmpeg/ffmpeg": "^0.12.10",
-		"@ffmpeg/util": "^0.12.1",
 		"@libsql/client": "^0.7.0",
 		"@tsndr/cloudflare-worker-jwt": "^2.5.3",
 		"autoprefixer": "^10.4.19",
