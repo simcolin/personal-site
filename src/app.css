@@ -2,14 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    font-family: 'Inter', sans-serif;
+@layer base {
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+    
+    * {
+        @apply box-border;
+    }
+    
+    button {
+        -webkit-tap-highlight-color: transparent;
+    }
 }
 
-* {
-    @apply box-border;
-}
-
-button {
-    -webkit-tap-highlight-color: transparent;
+@layer utilities {
+    .tooz-shadow {
+        box-shadow: 0 0 4px 2px #0002;
+    }
 }

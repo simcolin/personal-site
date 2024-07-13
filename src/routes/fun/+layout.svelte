@@ -2,6 +2,8 @@
     import { page } from "$app/stores";
     import { onMount } from "svelte";
 
+    let container: HTMLDivElement;
+
     type Project = {
         name: string,
         path: string,
@@ -50,20 +52,20 @@
     });
 </script>
 
-<div class="w-screen h-screen flex">
-    <nav id="nav" class="flex flex-col h-full py-4 shadow-xl z-10 bg-[#252f3f]">
-        <h1 class="font-bold text-2xl text-center">Fun Projects</h1>
+<div class="w-screen h-screen flex bg-[#252f3f]">
+    <nav id="nav" class="flex flex-col h-full py-4 z-10">
+        <a href="/fun" class="font-bold text-2xl text-center">Fun Projects</a>
         <div class="flex flex-col gap-1 px-2 mt-4">
             {#each projects as project}
                 <a
                     class="nav-link px-4 py-2 whitespace-nowrap rounded-lg relative group"
-                    class:active={$page.url.pathname === project.path}
+                    class:active={$page.url.pathname.includes(project.path)}
                     href="/fun{project.path}">
                     <span>{project.name}</span>
                     {#if project.description}
-                        <div class="absolute left-full top-1/2 -translate-y-1/2 pl-4 invisible group-hover:visible">
+                        <div class="absolute left-full top-1/2 -translate-y-1/2 pl-2 invisible group-hover:visible z-20">
                             <div class="marked transition-all absolute left-full top-1/2 -translate-y-1/2
-                                rounded-lg bg-[#252f3f] px-4 py-2 opacity-0 shadow-xl select-auto
+                                rounded-lg bg-[#252f3f] px-4 py-2 opacity-0 tooz-shadow select-auto
                                 group-hover:left-full group-hover:opacity-100">
                                 {@html project.description}
                                 <div class="flex justify-end">
@@ -81,13 +83,15 @@
             {/each}
         </div>
     </nav>
-    <main class="w-full h-full grow relative flex overflow-auto">
-        <slot />
+    <main class="w-full h-full grow relative flex overflow-auto py-4 pr-4 pl-2">
+        <div id="project-container" class="w-full h-full rounded-lg overflow-hidden tooz-shadow" bind:this={container}>
+            <slot />
+        </div>
     </main>
 </div>
 
 <style lang="postcss">
-    .nav-link.active {
+    .active {
         @apply bg-[#161e2e];
     }
 
