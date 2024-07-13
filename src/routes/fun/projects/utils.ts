@@ -31,9 +31,9 @@ export class Vector3 {
     }
 
     lerp(vec: Vector3, t: number): Vector3 {
-        this.x = this.x + (vec.x - this.x) * t;
-        this.y = this.y + (vec.y - this.y) * t;
-        this.z = this.z + (vec.z - this.z) * t;
+        this.x = u.lerp(this.x, vec.x, t);
+        this.y = u.lerp(this.y, vec.y, t);
+        this.z = u.lerp(this.z, vec.z, t);
         return this;
     }
 
@@ -127,27 +127,27 @@ export function color(r: number, g: number, b: number, a: number = 255): Color {
 
 export function colorLerp(a: Color, b: Color, t: number): Color {
     return [
-        Math.floor(a[0] + (a[0] - b[0]) * t),
-        Math.floor(a[1] + (a[1] - b[1]) * t),
-        Math.floor(a[2] + (a[2] - b[2]) * t),
-        Math.floor(a[3] + (a[3] - b[3]) * t),
+        u.lerp(a[0], b[0], t),
+        u.lerp(a[1], b[1], t),
+        u.lerp(a[2], b[2], t),
+        u.lerp(a[3], b[3], t),
     ];
 }
 
 export function colorToHsl(color: Color): string {
-    return "hsl(" + Math.floor(color[0] / 255 * 360) + ", " + Math.floor(color[1] / 2.55) + "%, " + Math.floor(color[2] / 2.55) + "%)";
+    return "hsl(" + color[0] / 255 * 360 + ", " + color[1] / 2.55 + "%, " + color[2] / 2.55 + "%)";
 }
 
 export function colorToHex(color: Color) {
     if (color[3] === 255) {
-        return "#" + color[0].toString(16).padStart(2, "0")
-            + color[1].toString(16).padStart(2, "0")
-            + color[2].toString(16).padStart(2, "0");
+        return "#" + Math.round(color[0]).toString(16).padStart(2, "0")
+            + Math.round(color[1]).toString(16).padStart(2, "0")
+            + Math.round(color[2]).toString(16).padStart(2, "0");
     }
-    return "#" + color[0].toString(16).padStart(2, "0")
-        + color[1].toString(16).padStart(2, "0")
-        + color[2].toString(16).padStart(2, "0")
-        + color[3].toString(16).padStart(2, "0");
+    return "#" + Math.round(color[0]).toString(16).padStart(2, "0")
+        + Math.round(color[1]).toString(16).padStart(2, "0")
+        + Math.round(color[2]).toString(16).padStart(2, "0")
+        + Math.round(color[3]).toString(16).padStart(2, "0");
 }
 
 export function colorToString(color: Color) {
@@ -166,5 +166,11 @@ export const u = {
     },
     map(val: number, fromMin: number, fromMax: number, toMin: number, toMax: number) {
         return (val - fromMin) / (fromMax - fromMin) * (toMax - toMin) + toMin;
+    },
+    lerp(a: number, b: number, t: number) {
+        return a + (b - a) * t;
+    },
+    clamp(v: number, min: number, max: number) {
+        return Math.min(Math.max(v, min), max);
     },
 }

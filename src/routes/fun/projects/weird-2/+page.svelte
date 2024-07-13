@@ -97,7 +97,7 @@
             lines.push({
                 pos: startPos,
                 prevPos: new Vector2(startPos.x, startPos.y),
-                color: colorToHsl(color(u.random(0, 255), u.random(125, 255), u.random(255 * 0.25, 255 * 0.75))),
+                color: colorToHsl(color(u.random(0, 255), u.random(125, 255), 127.5 + u.random(-50, 50))),
                 direction: new Vector2(0, 1).rotate(u.random(2 * Math.PI)),
                 thickness: 5,
                 rotationVel: 0,
