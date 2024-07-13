@@ -1,10 +1,9 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-    import { colorLerp, colorToString, createColor, Vector3, type Color } from "./utils";
+    import { color, colorToString, Vector3 } from "../utils";
     import { createNoise3D } from "simplex-noise";
     import { PixelatedStrand, Strand } from "./strand";
         
-    let canvasContainer: HTMLDivElement;
     let canvas: HTMLCanvasElement;
     let ctx: CanvasRenderingContext2D;
     let rafHandle: number;
@@ -15,7 +14,7 @@
     let frameCount = 0;
     let lastFrameTime = 0;
     
-    const BACKGROUND_COLOR = createColor(0, 12, 0, 255); 
+    const BACKGROUND_COLOR = color(0, 12, 0, 255); 
     const PIXEL_SIZE = 10;
 
     const WIND_SCALE = 50.0;
@@ -132,9 +131,8 @@
     }
 
     onMount(() => {
-        const nav = document.getElementById("nav")!;
-        canvas.width = window.innerWidth - nav.clientWidth;
-        canvas.height = window.innerHeight;
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
 
         ctx = canvas.getContext("2d")!;
         setup();
@@ -146,11 +144,11 @@
     })
 </script>
 
-<div bind:this={canvasContainer} class="w-full h-full relative">
-    <div class="absolute top-2 right-2 z-10 shadow-md">{frameRate} FPS</div>
-    <label class="flex items-center gap-2 absolute top-2 left-2 z-10 shadow-md select-none">
+<div class="w-full h-full relative">
+    <canvas bind:this={canvas} on:click={onClick} class="w-full h-full"></canvas>
+    <div class="absolute top-2 right-2 shadow-md">{frameRate} FPS</div>
+    <label class="flex items-center gap-2 absolute top-2 left-2 shadow-md select-none">
         <input type="checkbox" class="checkbox-sm" bind:checked={renderPixel} />
         Render Pixel
     </label>
-    <canvas bind:this={canvas} on:click={onClick} class="w-full h-full"></canvas>
 </div>

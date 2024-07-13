@@ -1,7 +1,7 @@
-import { colorLerp, colorToString, createColor, type Color } from "./utils";
+import { colorLerp, colorToString, color, type Color } from "../utils";
 
-const STRAND_COLOR = createColor(0, 255, 0, 255);
-const BLACK = createColor(0, 0, 0, 255);
+const STRAND_COLOR = color(0, 255, 0, 255);
+const BLACK = color(0, 0, 0, 255);
 
 export class PixelatedStrand {
     constructor(
