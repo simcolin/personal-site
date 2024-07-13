@@ -1,30 +1,27 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import type { PageData } from "./$types";
+    import * as monaco from "monaco-editor";
     import { invalidateAll } from "$app/navigation";
     import { scale } from "svelte/transition";
     import FileTree from "./file-tree/FileTree.svelte";
     import type { IDirectory } from "./file-tree/types";
-    import { EditorView, keymap } from "@codemirror/view";
-    import { EditorState, StateEffect } from "@codemirror/state";
-    import { basicSetup } from "codemirror";
-    import { oneDark } from "@codemirror/theme-one-dark";
-    import { vscodeKeymap } from "@replit/codemirror-vscode-keymap";
 
     export let data: PageData;
 
+    type Monaco = typeof import("monaco-editor");
     type BDScript = { id: number, path: string, content: string };
     type EditedScript = { id?: number, path: string, content: string };
     type Toast = { type: "info" | "success" | "error", text: string, duration: number };
     type ToastOption = { type: "info" | "success" | "error", text: string, duration?: number };
 
-    let view: EditorView;
-
+    // let monaco: Monaco;
+    let meditor: monaco.editor.IStandaloneCodeEditor;
     let editorContainer: HTMLDivElement;
     let pathInput: HTMLInputElement;
 
     let fileTree: IDirectory = { type: "dir", name: "root", files: [] };
-    let editorStates = new Map<string, StateSnapshot | null>();
+    let editorStates = new Map<string, monaco.editor.ICodeEditorViewState | null>();
 
     function buildFileTree() {
         fileTree = { type: "dir", name: "root", files: [] };
@@ -65,19 +62,12 @@
         content: "",
     };
 
-    type StateSnapshot = {
-        doc: string,
-        selection: any,
-        scroll: StateEffect<any>,
-    }
-
     let toasts: Toast[] = [];
 
     function addToast(opts: ToastOption) {
         const toast = { duration: 3000, ...opts };
         toasts.push(toast);
         toasts = toasts;
-        view.scrollSnapshot()
         setTimeout(() => {
             const index = toasts.indexOf(toast);
             toasts.splice(index, 1);
@@ -90,10 +80,8 @@
             path: "/",
             content: "",
         };
-        view.dispatch({
-            changes: { from: 0, to: view.state.doc.length, insert: "" },
-            scrollIntoView: true,
-        })
+        meditor.setValue("");
+        meditor.setScrollTop(0);
         pathInput?.focus();
     }
 
@@ -117,49 +105,22 @@
         }
     }
 
-    function createStateSnapshot(): StateSnapshot {
-        return {
-            doc: view.state.doc.toString(),
-            selection: view.state.selection.toJSON(),
-            scroll: view.scrollSnapshot(),
-        };
-    }
-
-    function restoreStateSnapshot(snapshot: StateSnapshot) {
-        view.dispatch(
-            view.state.update({ 
-                changes: { from: 0, to: view.state.doc.length, insert: snapshot.doc },
-            })
-        );
-        view.dispatch(
-            view.state.update({
-                selection: snapshot.selection.ranges[0],
-                effects: [snapshot.scroll],
-            }),
-        );
-    }
-
     async function onEdit(script: BDScript) {
         try {
             if (editedScript.path !== "/") {
-                editorStates.set(editedScript.path, createStateSnapshot());
+                editorStates.set(editedScript.path, meditor.saveViewState());
             }
             editedScript = {
                 ...script,
             }
+            meditor.setValue(script.content);
             if (editorStates.get(editedScript.path)) {
-                let snapshot = editorStates.get(editedScript.path)!;
-                restoreStateSnapshot(snapshot);
+                meditor.restoreViewState(editorStates.get(editedScript.path) || null);
             } else {
-                view.dispatch(
-                    view.state.update({ 
-                        changes: { from: 0, to: view.state.doc.length, insert: script.content },
-                        scrollIntoView: true,
-                    })
-                );
+                meditor.setScrollTop(0);
             }
         } catch(e) {
-            addToast({ text: "Unexpected Error (see cnsole)", type: "error" });
+            addToast({ text: "Unexpected Error (see console)", type: "error" });
             console.error(e);
         }
     }
@@ -192,7 +153,7 @@
             saving = false;
             return;
         }
-        editedScript.content = view.state.doc.toString();
+        editedScript.content = meditor.getValue();
         try {
             if (editedScript.id) {
                 const response = await fetch(`/cc/api/scripts/${editedScript.id}`, { method: "POST", body: JSON.stringify(editedScript) });
@@ -206,7 +167,7 @@
                 const data = await response.json() as any;
                 if (data.success) {
                     addToast({ text: "Success", type: "success" });
-                    editorStates.set(editedScript.path, createStateSnapshot());
+                    editorStates.set(editedScript.path, meditor.saveViewState());
                     onCreate();
                     invalidateAll();
                 }
@@ -219,14 +180,13 @@
     }
 
     function initEditor() {
-        let state = EditorState.create({
-            doc: "",
-            extensions: [keymap.of(vscodeKeymap), oneDark, basicSetup],
-        });
-
-        view = new EditorView({
-            state: state,
-            parent: editorContainer,
+        meditor = monaco.editor.create(editorContainer, {
+            value: "",
+            language: "lua",
+            automaticLayout: true,
+	        theme: "vs-dark",
+            fontSize: 16,
+            fontFamily: "Iosevka",
         });
     }
 
@@ -275,7 +235,7 @@
                 </button>
             </div>
         </div>
-        <div bind:this={editorContainer} class="grow rounded-lg max-h-screen"/>
+        <div bind:this={editorContainer} class="grow rounded-lg overflow-hidden"/>
     </div>
 </div>
 
