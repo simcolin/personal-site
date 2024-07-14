@@ -6,6 +6,8 @@ collapse.
 ## Controls
 
 - <kbd>Space</kbd>: Generate a new layout
+- <kbd>A</kbd>: Toggle tileset display
+- <kbd>Z</kbd>: Toggle details display
 
 ## Assets
 
