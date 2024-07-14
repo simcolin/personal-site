@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-    import { color, colorToHsl, u, Vector2 } from "../utils";
+    import { u, Vector2 } from "../utils";
 
     let canvas: HTMLCanvasElement;
     let ctx: CanvasRenderingContext2D;
@@ -27,8 +27,8 @@
         if(Date.now() < startTime + line.delay) return;
 
         if(line.reset) {
-            line.pos = new Vector2((canvas.width / 2) + u.random(-50, 50), canvas.height);
-            line.prevPos = new Vector2(line.pos.x, line.pos.y);
+            line.pos = u.vector2((canvas.width / 2) + u.random(-50, 50), canvas.height);
+            line.prevPos = u.vector2(line.pos.x, line.pos.y);
             line.direction.x = 0;
             line.direction.y = -1;
             line.spinning = false;
@@ -72,11 +72,11 @@
 
         for(let i = 0; i < lineCount; ++i) {
             lines.push({
-                pos: new Vector2(0, 0),
-                prevPos: new Vector2(0, 0),
-                color: colorToHsl(color(u.random(0, 255), 255, 255/2)),
+                pos: u.vector2(0, 0),
+                prevPos: u.vector2(0, 0),
+                color: u.color(u.random(0, 255), 255, 255/2).toHsl(),
                 delay: u.random(2) * 1000,
-                direction: new Vector2(0, 0),
+                direction: u.vector2(0, 0),
                 spinning: false,
                 lengthBeforeSpin: 0,
                 rotationVel: 0,

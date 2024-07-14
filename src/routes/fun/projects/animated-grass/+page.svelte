@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-    import { color, colorToString, Vector3 } from "../utils";
+    import { u } from "../utils";
     import { createNoise3D } from "simplex-noise";
     import { PixelatedStrand, Strand } from "./strand";
         
@@ -14,7 +14,7 @@
     let frameCount = 0;
     let lastFrameTime = 0;
     
-    const BACKGROUND_COLOR = color(0, 12, 0, 255); 
+    const BACKGROUND_COLOR = u.color(0, 12, 0, 255); 
     const PIXEL_SIZE = 10;
 
     const WIND_SCALE = 50.0;
@@ -24,9 +24,9 @@
     const STRAND_MAX_LENGTH = 10;
     const STRAND_COUNT = 1000;
     
-    let windPosition = new Vector3(0, 0, 0);
-    let windDirection = new Vector3(0, 0, 0);
-    let windDirectionTarget = new Vector3(1, 1, 0.1).mult(WIND_SPEED);
+    let windPosition = u.vector3(0, 0, 0);
+    let windDirection = u.vector3(0, 0, 0);
+    let windDirectionTarget = u.vector3(1, 1, 0.1).mult(WIND_SPEED);
     let pixelatedStrands: PixelatedStrand[] = [];
     let strands: PixelatedStrand[] = [];
 
@@ -73,7 +73,7 @@
     }
 
     function draw() {
-        ctx.fillStyle = colorToString(BACKGROUND_COLOR);
+        ctx.fillStyle = BACKGROUND_COLOR.toRGBA();
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         if (renderPixel) {
@@ -115,10 +115,10 @@
         let mouseX = event.offsetX;
         let mouseY = event.offsetY;
 
-        windDirectionTarget = new Vector3(1, 1, 0.1).mult(WIND_SPEED);
-        windDirectionTarget = new Vector3(canvas.width / 2 - mouseX, canvas.height / 2 - mouseY, 0)
+        windDirectionTarget = u.vector3(1, 1, 0.1).mult(WIND_SPEED);
+        windDirectionTarget = u.vector3(canvas.width / 2 - mouseX, canvas.height / 2 - mouseY, 0)
             .normalize()
-            .add(new Vector3(0, 0, 0.1))
+            .add(u.vector3(0, 0, 0.1))
             .mult(WIND_SPEED);
     }
 

@@ -1,6 +1,7 @@
 <script lang="ts">
     import type P5 from "p5";
     import { onDestroy, onMount } from "svelte";
+    import { u } from "../utils";
 
     let canvasContainer: HTMLDivElement;
     let p5: P5;
@@ -20,23 +21,23 @@
         let isPrintingTileset = false;
         let isRawVersion = false;
 
-        const randomInt = (a: number, b?: number) => sk.floor(sk.random(a, b));
+        const randomInt = (a: number, b?: number) => Math.floor(u.random(a, b));
         const unique = <T>(v: T, i: number, a: T[]) => a.indexOf(v) === i;
 
         function hasChance(nb: number) {
-            return sk.random(100) > nb;
+            return u.random(100) > nb;
         }
 
         function loadTileset() {
             for(let i = 0; i < 132; ++i) {
                 const tileId = i;
-                tileset.set(tileId, new Tile(tileId % tilemapSize.x, sk.floor(tileId / tilemapSize.x), tileId));
+                tileset.set(tileId, new Tile(tileId % tilemapSize.x, Math.floor(tileId / tilemapSize.x), tileId));
             }
-            tileset.set(132, new Tile(50 % tilemapSize.x, sk.floor(50 / tilemapSize.x), 132));
+            tileset.set(132, new Tile(50 % tilemapSize.x, Math.floor(50 / tilemapSize.x), 132));
             (tileset.get(132) as Tile).rotation = -90;
-            tileset.set(133, new Tile(52 % tilemapSize.x, sk.floor(52 / tilemapSize.x), 133));
+            tileset.set(133, new Tile(52 % tilemapSize.x, Math.floor(52 / tilemapSize.x), 133));
             (tileset.get(133) as Tile).rotation = -90;
-            tileset.set(134, new Tile(53 % tilemapSize.x, sk.floor(53 / tilemapSize.x), 134));
+            tileset.set(134, new Tile(53 % tilemapSize.x, Math.floor(53 / tilemapSize.x), 134));
             (tileset.get(134) as Tile).rotation = -90;
 
             
@@ -310,10 +311,10 @@
             canvas.parent(canvasContainer);
             sk.noSmooth();
             
-            tileSize = sk.floor(sk.min(sk.width, sk.height) / MIN_GRID_SIZE);
+            tileSize = Math.floor(sk.min(sk.width, sk.height) / MIN_GRID_SIZE);
             gridSize = sk.createVector(
-                sk.floor(sk.width / tileSize),
-                sk.floor(sk.height / tileSize)
+                Math.floor(sk.width / tileSize),
+                Math.floor(sk.height / tileSize)
             );
 
             console.time("loadTileset");

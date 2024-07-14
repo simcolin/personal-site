@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-    import { color, colorLerp, colorToHex, colorToString, u, Vector2 } from "../utils";
+    import { u, Vector2 } from "../utils";
     
     let canvas: HTMLCanvasElement;
     let ctx: CanvasRenderingContext2D;
@@ -13,11 +13,11 @@
     let pointYCount = 0;
     let pointRadius = 0;
     let colors = [
-        color(19, 41, 61),
-        color(0, 100, 148),
-        color(36, 123, 160),
-        color(27, 152, 224),
-        color(232, 241, 242),
+        u.color(19, 41, 61),
+        u.color(0, 100, 148),
+        u.color(36, 123, 160),
+        u.color(27, 152, 224),
+        u.color(232, 241, 242),
     ];
 
     function pointAt(x: number, y: number) {
@@ -40,7 +40,7 @@
         let step = 1 / (colors.length - 1);
 
         let mapped = u.map(ratio, min * step, max * step, 0, 1);
-        return colorLerp(colors[min], colors[max], mapped);
+        return colors[min].toLerped(colors[max], mapped);
     }
 
     function findCircleCenter(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number) {
@@ -108,16 +108,16 @@
     }
 
     function draw() {
-        ctx.fillStyle = colorToString(color(31, 31, 31));
+        ctx.fillStyle = u.color(31, 31, 31).toRGBA();
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.strokeStyle = colorToString(color(70, 70, 70, 60));
+        ctx.strokeStyle = u.color(70, 70, 70, 60).toRGBA();
         ctx.lineWidth = 1;
         for(let triangle of triangles) {
             triangle.render();
         }
 
-        ctx.fillStyle = colorToString(color(70, 70, 70));
+        ctx.fillStyle = u.color(70, 70, 70).toRGBA();
         ctx.lineWidth = 5;
         for(let point of points) {
             point.update();
@@ -140,7 +140,7 @@
 
         render() {
             let pos = findCircleCenter(this.a.position.x, this.a.position.y, this.b.position.x, this.b.position.y, this.c.position.x, this.c.position.y);
-            ctx.fillStyle = colorToHex(getColor(pos));
+            ctx.fillStyle = getColor(pos).toHex();
             ctx.beginPath();
             ctx.moveTo(this.a.position.x, this.a.position.y);
             ctx.lineTo(this.b.position.x, this.b.position.y);

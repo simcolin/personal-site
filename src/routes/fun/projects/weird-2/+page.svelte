@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-    import { color, colorToHsl, colorToString, u, Vector2 } from "../utils";
+    import { u, Vector2 } from "../utils";
         
     let canvas: HTMLCanvasElement;
     let ctx: CanvasRenderingContext2D;
@@ -97,7 +97,7 @@
             lines.push({
                 pos: startPos,
                 prevPos: new Vector2(startPos.x, startPos.y),
-                color: colorToHsl(color(u.random(0, 255), u.random(125, 255), 127.5 + u.random(-50, 50))),
+                color: u.color(u.random(0, 255), u.random(125, 255), 127.5 + u.random(-50, 50)).toHsl(),
                 direction: new Vector2(0, 1).rotate(u.random(2 * Math.PI)),
                 thickness: 5,
                 rotationVel: 0,
@@ -111,7 +111,7 @@
     }
 
     function draw() {
-        ctx.fillStyle = colorToString(color(0, 0, 0, 255 * 0.05));
+        ctx.fillStyle = u.color(0, 0, 0, 255 * 0.05).toRGBA();
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         for(let i = 0; i < lines.length; ++i) {

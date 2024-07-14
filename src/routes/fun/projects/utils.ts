@@ -113,48 +113,76 @@ export class Vector2 {
     }
 }
 
-export type Color = [number, number, number, number];
+export class Color {
+    array: [number, number, number, number];
 
-/**
- * @param r red channel value between 0 and 255
- * @param g green channel value between 0 and 255
- * @param b blue channel value between 0 and 255
- * @param a alpha channel value between 0 and 255
- */
-export function color(r: number, g: number, b: number, a: number = 255): Color {
-    return [r, g, b, a];
-}
-
-export function colorLerp(a: Color, b: Color, t: number): Color {
-    return [
-        u.lerp(a[0], b[0], t),
-        u.lerp(a[1], b[1], t),
-        u.lerp(a[2], b[2], t),
-        u.lerp(a[3], b[3], t),
-    ];
-}
-
-export function colorToHsl(color: Color): string {
-    return "hsl(" + color[0] / 255 * 360 + ", " + color[1] / 2.55 + "%, " + color[2] / 2.55 + "%)";
-}
-
-export function colorToHex(color: Color) {
-    if (color[3] === 255) {
-        return "#" + Math.round(color[0]).toString(16).padStart(2, "0")
-            + Math.round(color[1]).toString(16).padStart(2, "0")
-            + Math.round(color[2]).toString(16).padStart(2, "0");
+    constructor(r: number, g: number, b: number, a: number = 255) {
+        this.array = [r, g, b, a];
     }
-    return "#" + Math.round(color[0]).toString(16).padStart(2, "0")
-        + Math.round(color[1]).toString(16).padStart(2, "0")
-        + Math.round(color[2]).toString(16).padStart(2, "0")
-        + Math.round(color[3]).toString(16).padStart(2, "0");
-}
 
-export function colorToString(color: Color) {
-    if(color[3] === 255) {
-        return "rgb(" + color[0] + ", " + color[1] + ", " + color[2] + ")";
+    get r() { return this.array[0]; }
+    set r(val: number) { this.array[0] = val; }
+
+    get g() { return this.array[1]; }
+    set g(val: number) { this.array[1] = val; }
+
+    get b() { return this.array[2]; }
+    set b(val: number) { this.array[2] = val; }
+
+    get a() { return this.array[3]; }
+    set a(val: number) { this.array[3] = val; }
+
+    toString() {
+        return this.toRGBA();
     }
-    return "rgba(" + color[0] + ", " + color[1] + ", " + color[2] + ", " + color[3]/255 + ")";
+
+    toRGBA() {
+        if(this.array[3] === 255) {
+            return "rgb(" + this.array[0] + ", " + this.array[1] + ", " + this.array[2] + ")";
+        }
+        return "rgba(" + this.array[0] + ", " + this.array[1] + ", " + this.array[2] + ", " + this.array[3]/255 + ")";
+    }
+
+    toRGB() {
+        return "rgb(" + this.array[0] + ", " + this.array[1] + ", " + this.array[2] + ")";
+    }
+
+    toHex() {
+        if (this.array[3] === 255) {
+            return "#" + Math.round(this.array[0]).toString(16).padStart(2, "0")
+                + Math.round(this.array[1]).toString(16).padStart(2, "0")
+                + Math.round(this.array[2]).toString(16).padStart(2, "0");
+        }
+        return "#" + Math.round(this.array[0]).toString(16).padStart(2, "0")
+            + Math.round(this.array[1]).toString(16).padStart(2, "0")
+            + Math.round(this.array[2]).toString(16).padStart(2, "0")
+            + Math.round(this.array[3]).toString(16).padStart(2, "0");
+    }
+
+    toHsl() {
+        return "hsl(" + this.array[0] / 255 * 360 + ", " + this.array[1] / 2.55 + "%, " + this.array[2] / 2.55 + "%)";
+    }
+
+    lerp(color: Color, t: number) {
+        this.array[0] = u.lerp(this.array[0], color.array[0], t);
+        this.array[1] = u.lerp(this.array[1], color.array[1], t);
+        this.array[2] = u.lerp(this.array[2], color.array[2], t);
+        this.array[3] = u.lerp(this.array[3], color.array[3], t);
+        return this;
+    }
+
+    toLerped(color: Color, t: number) {
+        return new Color(
+            u.lerp(this.array[0], color.array[0], t),
+            u.lerp(this.array[1], color.array[1], t),
+            u.lerp(this.array[2], color.array[2], t),
+            u.lerp(this.array[3], color.array[3], t)
+        );
+    }
+
+    copy() {
+        return new Color(this.array[0], this.array[1], this.array[2], this.array[3]);
+    }
 }
 
 export const u = {
@@ -172,5 +200,31 @@ export const u = {
     },
     clamp(v: number, min: number, max: number) {
         return Math.min(Math.max(v, min), max);
+    },
+    vector2(x: number, y: number) {
+        return new Vector2(x, y);
+    },
+    vector3(x: number, y: number, z: number) {
+        return new Vector3(x, y, z);
+    },
+    color(r: number, g: number, b: number, a: number = 255) {
+        return new Color(r, g, b, a);
+    },
+    loadImage(url: string): Promise<HTMLImageElement> {
+        return new Promise(resolve => {
+            let img = new Image();
+            img.onload = () => {
+                resolve(img);
+            }
+            img.src = url;
+        });
+    },
+    loadImagePixels(image: HTMLImageElement) {
+        let canvas = document.createElement("canvas");
+        canvas.width = image.naturalWidth;
+        canvas.height = image.naturalHeight;
+        let context = canvas.getContext("2d")!;
+        context.drawImage(image, 0, 0);
+        return context.getImageData(0, 0, canvas.width, canvas.height);
     },
 }
