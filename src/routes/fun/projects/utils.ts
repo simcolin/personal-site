@@ -227,4 +227,12 @@ export const u = {
         context.drawImage(image, 0, 0);
         return context.getImageData(0, 0, canvas.width, canvas.height);
     },
+    cropImage(image: HTMLImageElement, x: number, y: number, width: number, height: number): HTMLCanvasElement {
+        let canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        let context = canvas.getContext("2d")!;
+        context.drawImage(image, x, y, width, height, 0, 0, width, height);
+        return canvas;
+    },
 }

@@ -57,7 +57,7 @@
         processImage(imageUrl);
     }
 
-    onMount(async () => {
+    onMount(() => {
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
 
