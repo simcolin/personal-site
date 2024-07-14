@@ -263,7 +263,6 @@
         <p class="my-2">{generationTimeText}</p>
         <button class="mb-4 w-full py-2 rounded border bg-slate-700 hover:bg-slate-600" on:click={() => drawImageToCanvas(image)}>Generate</button>
         <button class="mb-4 w-full py-2 rounded border bg-slate-700 hover:bg-slate-600" class:opacity-50={downloadDisabled} disabled={downloadDisabled} on:click={downloadCanvas}>{downloadText}</button>
-        <a class="mt-auto underline" href="https://github.com/simcolin/triangle-image-mesher" target="blank">Github</a>
     </nav>
     <div class="canvas-ctn bg-slate-900 grow">
         <canvas bind:this={canvas} class="w-full h-full object-contain" />
