@@ -32,7 +32,7 @@
             line.direction.x = 0;
             line.direction.y = -1;
             line.spinning = false;
-            line.lengthBeforeSpin = canvas.height * 0.25 + u.random(0, canvas.height * 0.75);
+            line.lengthBeforeSpin = canvas.height * 0.5 - u.random(-canvas.height * 0.4, canvas.height * 0.4);
             line.reset = false;
         } else {
             if(line.spinning) {

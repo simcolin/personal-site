@@ -8,7 +8,7 @@
         name: string,
         path: string,
         description: string,
-    }
+    };
 
     let projects: Project[] = [
         { name: "Weird 1", path: "/projects/weird-1", description: "" },
