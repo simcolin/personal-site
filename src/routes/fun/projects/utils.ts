@@ -215,7 +215,8 @@ export const u = {
             let img = new Image();
             img.onload = () => {
                 resolve(img);
-            }
+            };
+            img.onerror = e => { throw e };
             img.src = url;
         });
     },
@@ -225,7 +226,9 @@ export const u = {
         canvas.height = image.naturalHeight;
         let context = canvas.getContext("2d")!;
         context.drawImage(image, 0, 0);
-        return context.getImageData(0, 0, canvas.width, canvas.height);
+        let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        canvas.remove();
+        return imageData;
     },
     cropImage(image: HTMLImageElement, x: number, y: number, width: number, height: number): HTMLCanvasElement {
         let canvas = document.createElement("canvas");

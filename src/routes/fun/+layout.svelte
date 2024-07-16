@@ -21,6 +21,7 @@
         { name: "Game Of Life", path: "/projects/game-of-life", description: "" },
         { name: "GPU Pathtracer", path: "/projects/gpu-pathtracer", description: "" },
         { name: "Animated Grass", path: "/projects/animated-grass", description: "" },
+        { name: "Frame Transform", path: "/projects/frame-transform", description: "" },
     ];
 
     async function loadDescriptions() {
